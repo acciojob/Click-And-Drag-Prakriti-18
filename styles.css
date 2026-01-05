@@ -1,59 +1,21 @@
-html {
-  box-sizing: border-box;
-  background: url('https://source.unsplash.com/NFs6dRTBgaM/2000x2000') fixed;
-  background-size: cover;
-}
-
-*, *:before, *:after {
-  box-sizing: inherit;
-}
-
-body {
-  min-height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-family: sans-serif;
-  margin: 0;
-}
-
 .items {
   position: relative;
   width: 100%;
-  height: 800px;          /* ✅ FIX FOR CYPRESS */
-  min-height: 800px;      /* ✅ VERY IMPORTANT */
-  padding: 100px;
-  border: 1px solid white;
-  overflow-x: scroll;
-  overflow-y: hidden;
-  white-space: nowrap;
-  user-select: none;
+  overflow: hidden;
   background: rgba(255,255,255,0.1);
 }
 
-.items.active {
-  cursor: grabbing;
+.spacer {
+  height: 800px;   /* 🔥 Prevents height collapse */
 }
 
 .item {
-  width: 200px;
-  height: 200px;
-  display: inline-flex;
+  width: 150px;
+  height: 150px;
+  background: dodgerblue;
+  display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 60px;
-  color: rgba(0,0,0,0.15);
-  box-shadow: inset 0 0 0 10px rgba(0,0,0,0.15);
+  font-size: 40px;
   cursor: grab;
 }
-
-.item:nth-child(9n+1) { background: dodgerblue; }
-.item:nth-child(9n+2) { background: goldenrod; }
-.item:nth-child(9n+3) { background: paleturquoise; }
-.item:nth-child(9n+4) { background: gold; }
-.item:nth-child(9n+5) { background: cadetblue; }
-.item:nth-child(9n+6) { background: tomato; }
-.item:nth-child(9n+7) { background: lightcoral; }
-.item:nth-child(9n+8) { background: darkslateblue; }
-.item:nth-child(9n+9) { background: rebeccapurple; }
-
