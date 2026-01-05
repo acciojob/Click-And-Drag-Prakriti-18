@@ -18,56 +18,35 @@
 </div>
 
 <script>
-  const container = document.querySelector('.items');
-  const items = document.querySelectorAll('.item');
+  const slider = document.querySelector('.items');
 
-  let activeItem = null;
-  let startX = 0;
-  let startY = 0;
-  let initialLeft = 0;
-  let initialTop = 0;
+  let isDown = false;
+  let startX;
+  let scrollLeft;
 
-  items.forEach(item => {
-    const r = item.getBoundingClientRect();
-    const c = container.getBoundingClientRect();
-
-    item.style.position = 'absolute';
-    item.style.left = (r.left - c.left) + 'px';
-    item.style.top = (r.top - c.top) + 'px';
-
-    item.addEventListener('mousedown', e => {
-      activeItem = item;
-
-      startX = e.clientX;
-      startY = e.clientY;
-
-      initialLeft = parseInt(item.style.left);
-      initialTop = parseInt(item.style.top);
-    });
+  slider.addEventListener('mousedown', (e) => {
+    isDown = true;
+    slider.classList.add('active');
+    startX = e.pageX - slider.offsetLeft;
+    scrollLeft = slider.scrollLeft;
   });
 
-  container.addEventListener('mousemove', e => {
-    if (!activeItem) return;
-
-    const dx = e.clientX - startX;
-    const dy = e.clientY - startY;
-
-    let newLeft = initialLeft + dx;
-    let newTop = initialTop + dy;
-
-    newLeft = Math.max(0, Math.min(newLeft, container.clientWidth - activeItem.offsetWidth));
-    newTop = Math.max(0, Math.min(newTop, container.clientHeight - activeItem.offsetHeight));
-
-    activeItem.style.left = newLeft + 'px';
-    activeItem.style.top = newTop + 'px';
+  slider.addEventListener('mouseleave', () => {
+    isDown = false;
+    slider.classList.remove('active');
   });
 
-  container.addEventListener('mouseup', () => {
-    activeItem = null;
+  slider.addEventListener('mouseup', () => {
+    isDown = false;
+    slider.classList.remove('active');
   });
 
-  container.addEventListener('mouseleave', () => {
-    activeItem = null;
+  slider.addEventListener('mousemove', (e) => {
+    if (!isDown) return;
+    e.preventDefault();
+    const x = e.pageX - slider.offsetLeft;
+    const walk = (x - startX) * 2; // scroll speed
+    slider.scrollLeft = scrollLeft - walk;
   });
 </script>
 
