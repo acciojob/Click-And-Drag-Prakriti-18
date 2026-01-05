@@ -18,47 +18,59 @@
 </div>
 
 <script>
-const container = document.querySelector('.items');
-const items = document.querySelectorAll('.item');
+  const container = document.querySelector('.items');
+  const items = document.querySelectorAll('.item');
 
-let active = null;
-let offsetX = 0;
-let offsetY = 0;
+  let activeItem = null;
+  let startX = 0;
+  let startY = 0;
+  let initialLeft = 0;
+  let initialTop = 0;
 
-items.forEach(item => {
-  const r = item.getBoundingClientRect();
-  const c = container.getBoundingClientRect();
+  items.forEach(item => {
+    const r = item.getBoundingClientRect();
+    const c = container.getBoundingClientRect();
 
-  item.style.position = 'absolute';
-  item.style.left = r.left - c.left + 'px';
-  item.style.top = r.top - c.top + 'px';
+    item.style.position = 'absolute';
+    item.style.left = (r.left - c.left) + 'px';
+    item.style.top = (r.top - c.top) + 'px';
 
-  item.addEventListener('mousedown', e => {
-    active = item;
-    offsetX = e.clientX - r.left;
-    offsetY = e.clientY - r.top;
-    item.style.zIndex = 1000;
+    item.addEventListener('mousedown', e => {
+      activeItem = item;
+
+      startX = e.clientX;
+      startY = e.clientY;
+
+      initialLeft = parseInt(item.style.left);
+      initialTop = parseInt(item.style.top);
+    });
   });
-});
 
-document.addEventListener('mousemove', e => {
-  if (!active) return;
+  container.addEventListener('mousemove', e => {
+    if (!activeItem) return;
 
-  const c = container.getBoundingClientRect();
-  let x = e.clientX - c.left - offsetX;
-  let y = e.clientY - c.top - offsetY;
+    const dx = e.clientX - startX;
+    const dy = e.clientY - startY;
 
-  x = Math.max(0, Math.min(x, container.clientWidth - active.offsetWidth));
-  y = Math.max(0, Math.min(y, container.clientHeight - active.offsetHeight));
+    let newLeft = initialLeft + dx;
+    let newTop = initialTop + dy;
 
-  active.style.left = x + 'px';
-  active.style.top = y + 'px';
-});
+    newLeft = Math.max(0, Math.min(newLeft, container.clientWidth - activeItem.offsetWidth));
+    newTop = Math.max(0, Math.min(newTop, container.clientHeight - activeItem.offsetHeight));
 
-document.addEventListener('mouseup', () => {
-  active = null;
-});
+    activeItem.style.left = newLeft + 'px';
+    activeItem.style.top = newTop + 'px';
+  });
+
+  container.addEventListener('mouseup', () => {
+    activeItem = null;
+  });
+
+  container.addEventListener('mouseleave', () => {
+    activeItem = null;
+  });
 </script>
+
 
 </body>
 </html>
