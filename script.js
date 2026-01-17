@@ -1,59 +1,58 @@
-// Your code here.
-const container = document.getElementById('container');
-const cubes = document.querySelectorAll('.cube');
+const items = document.querySelector('.items');
+const cubes = document.querySelectorAll('.item');
 
-let activeCube = null;
+let activeItem = null;
 let offsetX = 0;
 let offsetY = 0;
 
-/* 🔥 STEP 1: Place cubes in grid with initial positions */
+/* 🔥 INITIAL GRID POSITIONS (IMPORTANT FOR CYPRESS) */
+const SIZE = 100;
 const GAP = 10;
-const CUBE_SIZE = 100;
 const COLS = 4;
 
 cubes.forEach((cube, index) => {
   const row = Math.floor(index / COLS);
   const col = index % COLS;
 
-  const left = col * (CUBE_SIZE + GAP);
-  const top = row * (CUBE_SIZE + GAP);
-
-  cube.style.left = left + 'px';
-  cube.style.top = top + 'px';
+  cube.style.left = col * (SIZE + GAP) + 'px';
+  cube.style.top = row * (SIZE + GAP) + 'px';
 });
 
-/* 🔥 STEP 2: Drag logic */
+/* 🔥 DRAG START */
 cubes.forEach(cube => {
   cube.addEventListener('mousedown', (e) => {
-    activeCube = cube;
-    cube.style.cursor = 'grabbing';
+    activeItem = cube;
 
     const rect = cube.getBoundingClientRect();
     offsetX = e.clientX - rect.left;
     offsetY = e.clientY - rect.top;
+
+    cube.style.cursor = 'grabbing';
   });
 });
 
+/* 🔥 DRAG MOVE */
 document.addEventListener('mousemove', (e) => {
-  if (!activeCube) return;
+  if (!activeItem) return;
 
-  const containerRect = container.getBoundingClientRect();
-  const cubeRect = activeCube.getBoundingClientRect();
+  const containerRect = items.getBoundingClientRect();
+  const itemRect = activeItem.getBoundingClientRect();
 
   let x = e.clientX - containerRect.left - offsetX;
   let y = e.clientY - containerRect.top - offsetY;
 
-  /* 🔒 Boundary conditions */
-  x = Math.max(0, Math.min(x, containerRect.width - cubeRect.width));
-  y = Math.max(0, Math.min(y, containerRect.height - cubeRect.height));
+  /* 🔒 BOUNDARY CONSTRAINTS */
+  x = Math.max(0, Math.min(x, containerRect.width - itemRect.width));
+  y = Math.max(0, Math.min(y, containerRect.height - itemRect.height));
 
-  activeCube.style.left = x + 'px';
-  activeCube.style.top = y + 'px';
+  activeItem.style.left = x + 'px';
+  activeItem.style.top = y + 'px';
 });
 
+/* 🔥 DRAG END */
 document.addEventListener('mouseup', () => {
-  if (activeCube) {
-    activeCube.style.cursor = 'grab';
-    activeCube = null;
+  if (activeItem) {
+    activeItem.style.cursor = 'grab';
+    activeItem = null;
   }
 });
