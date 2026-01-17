@@ -2,55 +2,19 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Click and Drag</title>
+  <title>Drag Cubes</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-<div class="items" style="height:800px; min-height:800px;">
-  <div class="spacer"></div>
-
-  <div class="item">01</div>
-  <div class="item">02</div>
-  <div class="item">03</div>
-  <div class="item">04</div>
-  <div class="item">05</div>
+<div class="container" id="container">
+  <div class="cube">01</div>
+  <div class="cube">02</div>
+  <div class="cube">03</div>
+  <div class="cube">04</div>
 </div>
 
-<script>
-  const slider = document.querySelector('.items');
-
-  let isDown = false;
-  let startX;
-  let scrollLeft;
-
-  slider.addEventListener('mousedown', (e) => {
-    isDown = true;
-    slider.classList.add('active');
-    startX = e.pageX - slider.offsetLeft;
-    scrollLeft = slider.scrollLeft;
-  });
-
-  slider.addEventListener('mouseleave', () => {
-    isDown = false;
-    slider.classList.remove('active');
-  });
-
-  slider.addEventListener('mouseup', () => {
-    isDown = false;
-    slider.classList.remove('active');
-  });
-
-  slider.addEventListener('mousemove', (e) => {
-    if (!isDown) return;
-    e.preventDefault();
-    const x = e.pageX - slider.offsetLeft;
-    const walk = (x - startX) * 3; // multiplier ensures scrollLeft > 0
-    slider.scrollLeft = scrollLeft - walk;
-  });
-</script>
-
-
+<script src="script.js"></script>
 </body>
 </html>
 
